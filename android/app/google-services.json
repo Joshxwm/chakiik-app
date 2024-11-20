@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "109624232793",
+    "project_id": "chak-ikk",
+    "storage_bucket": "chak-ikk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109624232793:android:2ab2fe3260827a52169a48",
+        "android_client_info": {
+          "package_name": "com.example.chakiikapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwpbe5UcRDT3xztT4IcP36tex_NJYAQzA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
