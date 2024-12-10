@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
   geolocator: ^13.0.2
   firebase_core: ^3.8.0
+  #firebase_auth: ^5.3.3
   firebase_messaging: ^15.1.5
   cloud_firestore: ^5.5.0
   http: ^1.2.2
@@ -51,13 +52,16 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - assets\images\Inicio_Aplicacion.jpg
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

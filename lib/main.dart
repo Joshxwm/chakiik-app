@@ -1,4 +1,5 @@
 import 'package:chakiik_app/firebase_options.dart';
+import 'package:chakiik_app/widgets/InicioApp.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,21 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const MyApp(
+    debugShowCheckedModeBanner: false,
+    home: InicioApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool debugShowCheckedModeBanner;
+  final Widget home;
+
+  const MyApp({
+    super.key,
+    required this.debugShowCheckedModeBanner,
+    required this.home,
+  });
 
   // This widget is the root of your application.
   @override
@@ -23,10 +34,11 @@ class MyApp extends StatelessWidget {
       title: 'Chack iik´',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 113, 192, 216)),
+            seedColor: const Color.fromARGB(255, 74, 233, 238)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Chack iik´'),
+      home: home,
+      debugShowCheckedModeBanner: debugShowCheckedModeBanner,
     );
   }
 }

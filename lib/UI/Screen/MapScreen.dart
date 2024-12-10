@@ -56,8 +56,7 @@ class _MapScreenState extends State<MapScreen> {
       ),
       body: GoogleMap(
         initialCameraPosition: const CameraPosition(
-          target: LatLng(19.432608,
-              -99.133209), // Coordenadas iniciales (p.ej., Ciudad de México)
+          target: LatLng(19.5776, -88.1544),
           zoom: 10,
         ),
         markers: _markers,
