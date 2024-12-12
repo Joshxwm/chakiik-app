@@ -20,7 +20,7 @@ class loginScreen extends StatelessWidget {
           child: const Padding(
             padding: EdgeInsets.only(top: 60.0, left: 22),
             child: Text(
-              'Hello\nSign in!',
+              'Hello\nIniciar Sesion!',
               style: TextStyle(
                   fontSize: 30,
                   color: Colors.white,
@@ -46,7 +46,7 @@ class loginScreen extends StatelessWidget {
                   const TextField(
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.check,color: Colors.grey,),
-                      label: Text('Gmail',style: TextStyle(
+                      label: Text('Correo Electronico',style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color:Color(0xffB81736),
                       ),)
@@ -55,7 +55,7 @@ class loginScreen extends StatelessWidget {
                   const TextField(
                     decoration: InputDecoration(
                         suffixIcon: Icon(Icons.visibility_off,color: Colors.grey,),
-                        label: Text('Password',style: TextStyle(
+                        label: Text('Contraseña',style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color:Color(0xffB81736),
                         ),)
@@ -64,7 +64,7 @@ class loginScreen extends StatelessWidget {
                   const SizedBox(height: 20,),
                   const Align(
                     alignment: Alignment.centerRight,
-                    child: Text('Forgot Password?',style: TextStyle(
+                    child: Text('Olvidó su contraseña?',style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 17,
                       color: Color(0xff281537),
@@ -83,7 +83,7 @@ class loginScreen extends StatelessWidget {
                         ]
                       ),
                     ),
-                    child: const Center(child: Text('SIGN IN',style: TextStyle(
+                    child: const Center(child: Text('Entrar',style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                       color: Colors.white
@@ -96,11 +96,11 @@ class loginScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text("Don't have account?",style: TextStyle(
+                        Text("¿No tiene una cuenta?",style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.grey
                         ),),
-                        Text("Sign up",style: TextStyle(///done login page
+                        Text("Crear cuenta",style: TextStyle(///done login page
                             fontWeight: FontWeight.bold,
                             fontSize: 17,
                             color: Colors.black

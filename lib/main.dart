@@ -41,8 +41,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
   String _location = 'Unknown';
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  static List<Widget> _widgetOptions = <Widget>[
+    LoginWidget(),
+    SignUpWidget(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   void initState() {
@@ -83,32 +95,88 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+       backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+       title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'Current location:',
-            ),
-            Text(
-              _location,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+      body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[ 
+          BottomNavigationBarItem(
+            icon: Icon(Icons.login),
+            label: 'Login',
+          ),
+          BottomNavigationBarItem( 
+            icon: Icon(Icons.app_registration),
+            label: 'Sign Up',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+} 
+// Widget de inicio de sesión 
+class LoginWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [ 
+          Text('Login'),
+          TextField(
+            decoration: InputDecoration(hintText: 'Username'),
+          ),
+          TextField(
+            decoration: InputDecoration(hintText: 'Password'),
+            obscureText: true,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Lógica de inicio de sesión
+            },
+            child: Text('Login'),
+          ),
+        ],
       ),
     );
   }
 }
-
-
-
+  
+  // Widget de creación de cuenta
+class SignUpWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Sign Up'),
+          TextField(
+            decoration: InputDecoration(hintText: 'Username'),
+          ),
+          TextField(
+            decoration: InputDecoration(hintText: 'Email'),
+          ),
+          TextField( 
+            decoration: InputDecoration(hintText: 'Password'),
+            obscureText: true,
+          ), 
+          ElevatedButton(
+            onPressed: () { 
+              // Lógica de creación de cuenta 
+            }, 
+            child: Text('Sign Up'),
+          ),
+        ], 
+      ), 
+    );
+  }
+}
 /*
   Hola, mi nombre es Annie, tengo 23 años, casi 24,
   soy virgen, me gustaría dejar de serlo, me gustaría

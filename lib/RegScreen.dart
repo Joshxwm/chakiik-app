@@ -20,7 +20,7 @@ class RegScreen extends StatelessWidget {
               child: const Padding(
                 padding: EdgeInsets.only(top: 60.0, left: 22),
                 child: Text(
-                  'Create Your\nAccount',
+                  'Crear una\nCuenta',
                   style: TextStyle(
                       fontSize: 30,
                       color: Colors.white,
@@ -46,7 +46,7 @@ class RegScreen extends StatelessWidget {
                       const TextField(
                         decoration: InputDecoration(
                             suffixIcon: Icon(Icons.check,color: Colors.grey,),
-                            label: Text('Full Name',style: TextStyle(
+                            label: Text('Nombre completo',style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color:Color(0xffB81736),
                             ),)
@@ -55,7 +55,7 @@ class RegScreen extends StatelessWidget {
                       const TextField(
                         decoration: InputDecoration(
                             suffixIcon: Icon(Icons.check,color: Colors.grey,),
-                            label: Text('Phone or Gmail',style: TextStyle(
+                            label: Text('Correo electronico o Numero telefonico',style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color:Color(0xffB81736),
                             ),)
@@ -64,7 +64,7 @@ class RegScreen extends StatelessWidget {
                       const TextField(
                         decoration: InputDecoration(
                             suffixIcon: Icon(Icons.visibility_off,color: Colors.grey,),
-                            label: Text('Password',style: TextStyle(
+                            label: Text('Contraseña',style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color:Color(0xffB81736),
                             ),)
@@ -73,7 +73,7 @@ class RegScreen extends StatelessWidget {
                       const TextField(
                         decoration: InputDecoration(
                             suffixIcon: Icon(Icons.visibility_off,color: Colors.grey,),
-                            label: Text('Conform Password',style: TextStyle(
+                            label: Text('Confirmar contraseña',style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color:Color(0xffB81736),
                             ),)
@@ -94,7 +94,7 @@ class RegScreen extends StatelessWidget {
                               ]
                           ),
                         ),
-                        child: const Center(child: Text('SIGN IN',style: TextStyle(
+                        child: const Center(child: Text('Entrar',style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                             color: Colors.white
@@ -107,11 +107,11 @@ class RegScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text("Don't have account?",style: TextStyle(
+                            Text("¿No tiene una cuenta?",style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.grey
                             ),),
-                            Text("Sign up",style: TextStyle(///done login page
+                            Text("Crear cuenta",style: TextStyle(///done login page
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17,
                                 color: Colors.black
