@@ -1,4 +1,5 @@
 import 'package:chakiik_app/firebase_options.dart';
+import 'package:chakiik_app/widgets/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,9 +45,11 @@ class _MyHomePageState extends State<MyHomePage> {
   String _location = 'Unknown';
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // Lista de widgets para las pantallas disponibles
   static List<Widget> _widgetOptions = <Widget>[
     LoginWidget(),
     SignUpWidget(),
+    MainScreen(), // Pantalla principal
   ];
 
   void _onItemTapped(int index) {
@@ -60,7 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _getCurrentLocation();
-    //Usar stream en FirebaseMessaging de mensajes entrantes
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       _handleMessage(message);
     });
@@ -73,7 +74,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _location = '${position.latitude}, ${position.longitude}';
     });
 
-    //Enviar ubicacion a FireStore para el seguimiento de huracanes
     await _firestore.collection('locations').add({
       'latitude': position.latitude,
       'longitude': position.longitude,
@@ -85,7 +85,6 @@ class _MyHomePageState extends State<MyHomePage> {
     if (message.data.isNotEmpty) {
       String title = message.data['title'];
       String body = message.data['body'];
-      // Mostrar una notificacion push
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('$title: $body'),
@@ -95,38 +94,44 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-       backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-       title: Text(widget.title),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[ 
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.login),
             label: 'Login',
           ),
-          BottomNavigationBarItem( 
+          BottomNavigationBarItem(
             icon: Icon(Icons.app_registration),
             label: 'Sign Up',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home', // Nueva opción de navegación
+          ),
         ],
         currentIndex: _selectedIndex,
+        selectedItemColor: Colors.cyan,
         onTap: _onItemTapped,
       ),
     );
   }
-} 
-// Widget de inicio de sesión 
+}
+
+// Widget de inicio de sesión
 class LoginWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [ 
+        children: [
           Text('Login'),
           TextField(
             decoration: InputDecoration(hintText: 'Username'),
@@ -146,8 +151,8 @@ class LoginWidget extends StatelessWidget {
     );
   }
 }
-  
-  // Widget de creación de cuenta
+
+// Widget de creación de cuenta
 class SignUpWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -162,23 +167,18 @@ class SignUpWidget extends StatelessWidget {
           TextField(
             decoration: InputDecoration(hintText: 'Email'),
           ),
-          TextField( 
+          TextField(
             decoration: InputDecoration(hintText: 'Password'),
             obscureText: true,
-          ), 
+          ),
           ElevatedButton(
-            onPressed: () { 
-              // Lógica de creación de cuenta 
-            }, 
+            onPressed: () {
+              // Lógica de creación de cuenta
+            },
             child: Text('Sign Up'),
           ),
-        ], 
-      ), 
+        ],
+      ),
     );
   }
 }
-/*
-  Hola, mi nombre es Annie, tengo 23 años, casi 24,
-  soy virgen, me gustaría dejar de serlo, me gustaría
-  tener mi primera vez. con alguien maduro.
-*/
