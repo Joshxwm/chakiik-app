@@ -1,5 +1,4 @@
 import 'package:chakiik_app/firebase_options.dart';
-import 'package:chakiik_app/UI/Start/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +16,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,27 +41,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
   String _location = 'Unknown';
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  // Lista de widgets para las pantallas disponibles
-  static List<Widget> _widgetOptions = <Widget>[
-    LoginWidget(),
-    SignUpWidget(),
-    MainScreen(), // Pantalla principal
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
+    //Usar stream en FirebaseMessaging de mensajes entrantes
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       _handleMessage(message);
     });
@@ -74,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _location = '${position.latitude}, ${position.longitude}';
     });
 
+    //Enviar ubicacion a FireStore para el seguimiento de huracanes
     await _firestore.collection('locations').add({
       'latitude': position.latitude,
       'longitude': position.longitude,
@@ -85,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (message.data.isNotEmpty) {
       String title = message.data['title'];
       String body = message.data['body'];
+      // Mostrar una notificacion push
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('$title: $body'),
@@ -100,84 +89,19 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.login),
-            label: 'Login',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.app_registration),
-            label: 'Sign Up',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home', // Nueva opción de navegación
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.cyan,
-        onTap: _onItemTapped,
-      ),
-    );
-  }
-}
-
-// Widget de inicio de sesión
-class LoginWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Login'),
-          TextField(
-            decoration: InputDecoration(hintText: 'Username'),
-          ),
-          TextField(
-            decoration: InputDecoration(hintText: 'Password'),
-            obscureText: true,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Lógica de inicio de sesión
-            },
-            child: Text('Login'),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Widget de creación de cuenta
-class SignUpWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Sign Up'),
-          TextField(
-            decoration: InputDecoration(hintText: 'Username'),
-          ),
-          TextField(
-            decoration: InputDecoration(hintText: 'Email'),
-          ),
-          TextField(
-            decoration: InputDecoration(hintText: 'Password'),
-            obscureText: true,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Lógica de creación de cuenta
-            },
-            child: Text('Sign Up'),
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'Current location:',
+            ),
+            Text(
+              _location,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
+        ),
       ),
     );
   }
