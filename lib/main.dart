@@ -1,5 +1,5 @@
 import 'package:chakiik_app/firebase_options.dart';
-import 'package:chakiik_app/widgets/MainScreen.dart';
+import 'package:chakiik_app/UI/Start/MainScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
