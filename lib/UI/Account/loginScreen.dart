@@ -1,119 +1,118 @@
-import 'package:flutter/material.dart';
+//  Inicio de Sesión
 
-class loginScreen extends StatelessWidget {
-  const loginScreen({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:video_player/video_player.dart';
+
+class loginScreen extends StatefulWidget {
+  const loginScreen({super.key});
+
+  @override
+  _loginScreenState createState() => _loginScreenState();
+}
+
+class _loginScreenState extends State<loginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicializa el video desde los assets
+    _controller = VideoPlayerController.asset('assets/video/rain.mp4')
+      ..initialize().then((_) {
+        setState(() {}); // Redibuja la interfaz cuando el video esté listo
+        _controller.play(); // Reproduce el video automáticamente
+        _controller.setLooping(true); // Repite el video en bucle
+      });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose(); // Libera el controlador cuando el widget se destruye
+  }
+
+  Future<void> _login() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Inicio de sesión exitoso')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: [
-        Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(colors: [
-              Color(0xffB81736),
-              Color(0xff281537),
-            ]),
-          ),
-          child: const Padding(
-            padding: EdgeInsets.only(top: 60.0, left: 22),
-            child: Text(
-              'Hello\nIniciar Sesion!',
-              style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 200.0),
-          child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-              color: Colors.white,
-            ),
-            height: double.infinity,
-            width: double.infinity,
-            child:  Padding(
-              padding: const EdgeInsets.only(left: 18.0,right: 18),
-              child: Column(
+      appBar: AppBar(
+        title: const Text('Iniciar Sesión'),
+      ),
+      body: Stack(
+        children: [
+          // Fondo de video
+          _controller.value.isInitialized
+              ? SizedBox.expand(
+                  child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: _controller.value.size.width,
+                      height: _controller.value.size.height,
+                      child: VideoPlayer(_controller),
+                    ),
+                  ),
+                )
+              : const Center(child: CircularProgressIndicator()),
+
+          // Contenido sobre el video
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const TextField(
-                    decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.check,color: Colors.grey,),
-                      label: Text('Correo Electronico',style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color:Color(0xffB81736),
-                      ),)
-                    ),
+              children: [
+                TextField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    labelText: 'Correo electrónico',
+                    filled: true,
+                    fillColor: Colors.white70,
                   ),
-                  const TextField(
-                    decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.visibility_off,color: Colors.grey,),
-                        label: Text('Contraseña',style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color:Color(0xffB81736),
-                        ),)
-                    ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Contraseña',
+                    filled: true,
+                    fillColor: Colors.white70,
                   ),
-                  const SizedBox(height: 20,),
-                  const Align(
-                    alignment: Alignment.centerRight,
-                    child: Text('Olvidó su contraseña?',style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                      color: Color(0xff281537),
-                    ),),
-                  ),
-                  const SizedBox(height: 70,),
-                  Container(
-                    height: 55,
-                    width: 300,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xffB81736),
-                          Color(0xff281537),
-                        ]
-                      ),
-                    ),
-                    child: const Center(child: Text('Entrar',style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.white
-                    ),),),
-                  ),
-                  const SizedBox(height: 150,),
-                  const Align(
-                    alignment: Alignment.bottomRight,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text("¿No tiene una cuenta?",style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey
-                        ),),
-                        Text("Crear cuenta",style: TextStyle(///done login page
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
-                            color: Colors.black
-                        ),),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                  obscureText: true,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: _login,
+                  child: const Text('Iniciar Sesión'),
+                ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/register');
+                  },
+                  child: const Text('¿No tienes cuenta? Crea una aquí'),
+                ),
+              ],
             ),
           ),
-        ),
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }

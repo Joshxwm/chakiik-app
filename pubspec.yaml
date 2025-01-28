@@ -31,9 +31,12 @@ dependencies:
   flutter:
     sdk: flutter
   geolocator: ^13.0.2
-  firebase_core: ^3.8.0
+  firebase_core: ^3.10.0
+  firebase_auth: ^5.4.0
   firebase_messaging: ^15.1.5
   cloud_firestore: ^5.5.0
+  firebase_storage: ^12.4.0
+  google_sign_in: ^6.2.2
   webview_flutter: ^4.10.0
   http: ^1.2.2
   provider: ^6.1.2
@@ -41,6 +44,7 @@ dependencies:
   google_maps_flutter: ^2.10.0
   location: ^7.0.1
   flutter_map: ^7.0.2
+  video_player: ^2.9.2
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
@@ -59,7 +63,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets: 
+    - assets/video/rain.mp4
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto/static/Roboto-Regular.ttf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
