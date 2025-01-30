@@ -1,5 +1,6 @@
 //  Inicio de Sesión
 
+import 'package:chakiik_app/UI/Start/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:video_player/video_player.dart';
@@ -22,26 +23,45 @@ class _loginScreenState extends State<loginScreen> {
     // Inicializa el video desde los assets
     _controller = VideoPlayerController.asset('assets/video/rain.mp4')
       ..initialize().then((_) {
-        setState(() {}); // Redibuja la interfaz cuando el video esté listo
-        _controller.play(); // Reproduce el video automáticamente
-        _controller.setLooping(true); // Repite el video en bucle
+        setState(() {});
+        _controller.play();
+        _controller.setLooping(true);
       });
   }
 
   @override
   void dispose() {
+    _controller.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
-    _controller.dispose(); // Libera el controlador cuando el widget se destruye
   }
 
   Future<void> _login() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Por favor, completa todos los campos')),
+      );
+      return;
+    }
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
+        email: email,
+        password: password,
       );
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Inicio de sesión exitoso')),
+      );
+
+      // Navegar a HomeScreen después del inicio de sesión
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -53,9 +73,6 @@ class _loginScreenState extends State<loginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Iniciar Sesión'),
-      ),
       body: Stack(
         children: [
           // Fondo de video
@@ -106,7 +123,7 @@ class _loginScreenState extends State<loginScreen> {
                   onPressed: () {
                     Navigator.pushNamed(context, '/register');
                   },
-                  child: const Text('¿No tienes cuenta? Crea una aquí'),
+                  child: const Text('¿No tienes cuenta? Regístrate aquí'),
                 ),
               ],
             ),

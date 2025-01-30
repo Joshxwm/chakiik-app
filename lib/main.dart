@@ -1,8 +1,9 @@
+import 'package:chakiik_app/UI/Start/HomeScreen.dart';
 import 'package:chakiik_app/firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-//
 import 'package:firebase_core/firebase_core.dart';
 import 'package:chakiik_app/UI/Account/loginScreen.dart'; // Asegúrate de que las rutas sean correctas
 import 'package:chakiik_app/UI/Account/regScreen.dart';
@@ -29,10 +30,12 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      initialRoute: '/login', // Ruta inicial
+      initialRoute:
+          FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
       routes: {
         '/login': (context) => const loginScreen(),
         '/register': (context) => const regScreen(),
+        '/home': (context) => HomeScreen(),
       },
       debugShowCheckedModeBanner: false,
     );

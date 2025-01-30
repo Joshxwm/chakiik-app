@@ -1,5 +1,6 @@
 // Crear cuenta
 
+import 'package:chakiik_app/UI/Start/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:video_player/video_player.dart';
@@ -22,95 +23,85 @@ class _regScreenState extends State<regScreen> {
     // Inicializa el video desde los assets
     _controller = VideoPlayerController.asset('assets/video/rain.mp4')
       ..initialize().then((_) {
-        setState(() {}); // Redibuja la interfaz cuando el video esté listo
-        _controller.play(); // Reproduce el video automáticamente
-        _controller.setLooping(true); // Repite el video en bucle
+        setState(() {});
+        _controller.play();
+        _controller.setLooping(true);
       });
   }
 
   @override
   void dispose() {
-    super.dispose();
-    _controller.dispose(); // Libera el controlador cuando el widget se destruye
-  }
-
-  Future<void> _register() async {
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Cuenta creada con éxito')),
-      );
-      Navigator.pop(context); // Regresa a la pantalla de inicio de sesión
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
-    }
+    _controller.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose(); // No olvides llamar a super.dispose() aquí
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Crear Cuenta'),
-      ),
+      appBar: AppBar(title: Text("Registro")),
       body: Stack(
         children: [
           // Fondo de video
-          _controller.value.isInitialized
-              ? SizedBox.expand(
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: SizedBox(
-                      width: _controller.value.size.width,
-                      height: _controller.value.size.height,
-                      child: VideoPlayer(_controller),
+          Positioned.fill(
+            child: VideoPlayer(_controller),
+          ),
+          // Formulario de registro
+          Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Correo electrónico',
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.7),
+                        border: OutlineInputBorder(),
+                      ),
                     ),
-                  ),
-                )
-              : const Center(child: CircularProgressIndicator()),
-
-          // Contenido sobre el video
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Correo electrónico',
-                    filled: true,
-                    fillColor: Colors.white70,
-                  ),
+                    SizedBox(height: 16),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Contraseña',
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.7),
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          // Registrar al usuario
+                          UserCredential userCredential = await FirebaseAuth
+                              .instance
+                              .createUserWithEmailAndPassword(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
+                          // Redirigir a la pantalla de inicio
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
+                            ),
+                          );
+                        } catch (e) {
+                          print('Error en el registro: $e');
+                        }
+                      },
+                      child: Text("Registrar"),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Contraseña',
-                    filled: true,
-                    fillColor: Colors.white70,
-                  ),
-                  obscureText: true,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _register,
-                  child: const Text('Registrar'),
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(
-                        context); // Regresa a la pantalla de inicio de sesión
-                  },
-                  child: const Text('¿Ya tienes cuenta? Inicia sesión aquí'),
-                ),
-              ],
+              ),
             ),
           ),
         ],
