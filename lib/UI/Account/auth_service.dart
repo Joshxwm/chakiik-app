@@ -3,45 +3,42 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Crear una nueva cuenta
-  Future<User?> registerWithEmailPassword(String email, String password) async {
+  Future<void> loginUser(String email, String password) async {
     try {
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return result.user;
+      User? user = userCredential.user;
+
+      if (user == null) {
+        print("Error: No se pudo iniciar sesión");
+        return;
+      }
+
+      print("Usuario autenticado: ${user.email}");
     } catch (e) {
-      print(e.toString());
-      return null;
+      print("Error al iniciar sesión: $e");
     }
   }
 
-  // Iniciar sesión con correo y contraseña
-  Future<User?> signInWithEmailPassword(String email, String password) async {
+  Future<void> registerUser(String email, String password) async {
     try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return result.user;
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
+      User? user = userCredential.user;
 
-  // Cerrar sesión
-  Future<void> signOut() async {
-    try {
-      await _auth.signOut();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+      if (user == null) {
+        print("Error: No se pudo registrar");
+        return;
+      }
 
-  // Obtener el estado del usuario actual
-  Stream<User?> get user {
-    return _auth.authStateChanges();
+      print("Usuario registrado: ${user.email}");
+    } catch (e) {
+      print("Error al registrar: $e");
+    }
   }
 }

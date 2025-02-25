@@ -2,12 +2,26 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        jcenter()
+        gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.12'
+        classpath 'com.android.tools.build:gradle:8.2.1'
         classpath 'com.google.gms:google-services:4.3.15'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22"
     }
 }
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' } // Mover esto aquí
+        maven { url "https://pkgs.dev.azure.com/Azure-Maps/AzureMaps-AndroidSDK/_packaging/azure-maps-android/maven/v1" } // Mover esto aquí
+    }
+}
+
 
 rootProject.buildDir = "../build"
 subprojects {
@@ -17,4 +31,10 @@ subprojects {
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
+}
+
+tasks.register("copyFlutterAssetsDebug") {
+    doLast {
+        doNotTrackState() // Evita que Gradle rastree el estado de esta tarea
+    }
 }

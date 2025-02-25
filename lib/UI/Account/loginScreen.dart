@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:video_player/video_player.dart';
 
-class loginScreen extends StatefulWidget {
-  const loginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  _loginScreenState createState() => _loginScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _loginScreenState extends State<loginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late VideoPlayerController _controller;
@@ -20,7 +20,6 @@ class _loginScreenState extends State<loginScreen> {
   @override
   void initState() {
     super.initState();
-    // Inicializa el video desde los assets
     _controller = VideoPlayerController.asset('assets/video/rain.mp4')
       ..initialize().then((_) {
         setState(() {});
@@ -58,8 +57,7 @@ class _loginScreenState extends State<loginScreen> {
         const SnackBar(content: Text('Inicio de sesión exitoso')),
       );
 
-      // Navegar a HomeScreen después del inicio de sesión
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
@@ -89,46 +87,134 @@ class _loginScreenState extends State<loginScreen> {
                 )
               : const Center(child: CircularProgressIndicator()),
 
-          // Contenido sobre el video
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Correo electrónico',
-                    filled: true,
-                    fillColor: Colors.white70,
-                  ),
+          // Capa semi-transparente sobre el video
+          Container(
+            color: Colors.black.withOpacity(0.3),
+          ),
+
+          // Contenido de inicio de sesión
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Contraseña',
-                    filled: true,
-                    fillColor: Colors.white70,
-                  ),
-                  obscureText: true,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      "Inicio de Sesión",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    _buildInputField(
+                      controller: _emailController,
+                      label: "Correo Electrónico",
+                    ),
+                    const SizedBox(height: 15),
+                    _buildInputField(
+                      controller: _passwordController,
+                      label: "Contraseña",
+                      obscureText: true,
+                    ),
+                    const SizedBox(height: 25),
+                    _buildLoginButton(),
+                    const SizedBox(height: 15),
+                    _buildSignUpText(),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _login,
-                  child: const Text('Iniciar Sesión'),
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/register');
-                  },
-                  child: const Text('¿No tienes cuenta? Regístrate aquí'),
-                ),
-              ],
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildInputField({
+    required TextEditingController controller,
+    required String label,
+    bool obscureText = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(fontSize: 14)),
+        const SizedBox(height: 5),
+        TextField(
+          controller: controller,
+          obscureText: obscureText,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Colors.black),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoginButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 50,
+      child: ElevatedButton(
+        onPressed: _login,
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(color: Colors.black),
+          ),
+        ),
+        child: Ink(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF4ABEFF), Color(0xFF41E6C1)],
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+          ),
+          child: Container(
+            alignment: Alignment.center,
+            child: const Text(
+              "Iniciar Sesión",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignUpText() {
+    return TextButton(
+      onPressed: () {
+        Navigator.pushNamed(context, '/register');
+      },
+      child: const Text.rich(
+        TextSpan(
+          text: "¿No tienes cuenta? ",
+          children: [
+            TextSpan(
+              text: "Regístrate aquí",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        style: TextStyle(color: Colors.black),
       ),
     );
   }

@@ -14,8 +14,8 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
@@ -23,22 +23,19 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.chakiikapp"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 24 //flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a'  // Asegúrate de que 'arm64-v8a' esté aquí
+        }
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.debug
-
         }
     }
 }
@@ -46,3 +43,9 @@ android {
 flutter {
     source = "../.."
 }
+
+// Aquí es donde va tu sección de dependencias:
+//dependencies {
+   //  implementation 'io.flutter:flutter_embedding_debug:3.7.0'
+    //implementation 'com.azure.android:azure-maps-control:0.1.0-beta.2'
+//}
